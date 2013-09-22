@@ -1,0 +1,52 @@
+#index_sub{
+    width:20%;
+	float:right;
+	/*border:1px solid pink;*/
+}
+#index_main {
+	width:78%;
+	/*border:1px solid red;*/
+}
+
+#index_main2 {
+	width:100%;
+	/*border:1px solid red;*/
+}
+.index_box1 {
+	width:33%;
+	height:120px;
+	float:left;
+	padding:15px;
+	/*border:1px solid blue;*/
+}
+#index_my_favorites{
+	width:34%;
+}
+.index_box2 {
+	width:49%;
+	float:left;
+	padding:15px;
+	/*border:1px solid blue;*/
+}
+.index_box3 {
+	width:100%;
+	float:left;
+	padding:15px;
+	/*border:1px solid blue;*/
+}
+
+.index_box1 span {
+	float:right;	
+}
+.index_box2 span {
+	float:right;	
+}
+.index_box3 span {
+	float:right;	
+}
+
+#index_toutiao{
+	
+}
+#index_jinghua{
+}

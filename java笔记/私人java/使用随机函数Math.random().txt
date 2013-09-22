@@ -1,0 +1,53 @@
+import java.util.Scanner;
+public class test{
+public static void main(String[] args) {
+Scanner s=new Scanner(System.in);
+int a=(int) (Math.round(Math.random()*100)+1);
+int b=(int) (Math.round(Math.random()*100)+1);
+System.out.println(a+"+"+b+"=");
+System.out.print("请输入之和：");
+int c=s.nextInt();
+if(a+b==c){
+System.out.println("OK");
+}else{
+System.out.println("NO");
+}
+}
+
+Math.random()方法生成0.0至1.0(不包含1.0)的double型随机数,一般地, a + Math.random() * b可以返回a到a+b之间的随机数,不包括a+b. 即 1-101 不包括101
+Math.round(Math.random()*elementsCount)+lowerBound
+
+6.3.2  使用随机函数Math.random()
+
+随机函数可以返回一个0～1之间的小数，通过一定的处理可以用来返回各种形式的随机数，例如：Math.round(Math.random()*100)，就返回一个0～100之间的随机整数；Math.round(Math.random()*100)+100，则返回100～200之间的随机整数。返回指定上限和下限随机整数的通用形式如下：
+
+Math.round(Math.random()*elementsCount)+lowerBound 
+
+这里elementsCount表示要产生的随机整数的数目，lowerBound表示整数范围的下限。如果要在一个数组中随机取一个值，这种用法很常用。
+
+在概率统计问题上也经常会用到随机数，同样可以使用Math.random()解决。例如一根木棒随机折成三段，它们能组成一个三角形的概率是多少？用概率论固然可以解答这个问题，但有时不能确定得到的答案是否正确。这时用JavaScript来模拟并得到近似答案，这样就可以验证答案是否正确了。
+
+求解过程就是使用JavaScript不断模拟将一根木棒随机折成三段，看它们是否能组成三角形，最后用能组成三角形的次数除以总的次数，得到最终的结果。模拟的次数越多，得到的结果就越精确。
+
+在实现过程中有两个需要考虑的核心问题，下面分别列出并解决：
+
+（1）如何模拟木棒的折断。木棒的长度固定，可以假设其为l，而折成3段只需两个断点，因此执行两次Math.random()来得到断点的位置，这样就将木棒随机分为了三段，可以很容易获取每一段的长度。而模拟的次数则很容易通过for循环进行控制。
+
+（2）如何判断是否能组成三角形。三角形的一个重要性质就是“两边之和大于第三边”。所以只要较短的两段大于第三段即可。在这个例子中，只要有一段的长度超过了0.5就说明不能组成三角形。
+
+解决了上述两个问题，下面给出代码实现：
+
+<script language="JavaScript" type="text/javascript"><!--var totalCount=10000;var okCount=0;for(var i=0;i<totalCount;i++){var duan1=Math.random();   //得到第一个断点var duan2=Math.random();   //得到第二个断点var l1=Math.min(duan1, duan2);  
+//得到第一段长度var l2=Math.max(duan1, duan2)-l1; //得到第二段长度var l3=1-l1-l2;   //得到第三段长度if(l1>=0.5 || l2>=0.5 || l3>=0.5)continue;   //只要有一边长超过0.5，说明不能组成三角形okCount++;}alert(okCount/totalCount);//--></script> 
+
+通过改变totalCount的值，可以很容易改变模拟执行的次数，模拟执行10000次得到的结果是0.2536，可见其概率约为1/4。事实上，通过概率论计算得到的精确结果正是1/4。尽管计算机模拟不能得到精确的结果，但它可以辅助验证理论结果的正确性。
+public class Text{
+	public static void main(String[] args){
+		long  n1=Math.round(Math.random()*10000000000l)+100l;
+		//int  n2=(int)Math.round(Math.random()*100000);
+		long  n3=Math.round(Math.random()*100);
+		//int  n4=(int)Math.round(Math.random()*100);
+		//System.out.println("n1="+n1+"     n2="+n2+"     n3="+n3+"    n4=" +n4);
+		System.out.println("n1="+n1+"   n3="+n3);
+		}
+	}

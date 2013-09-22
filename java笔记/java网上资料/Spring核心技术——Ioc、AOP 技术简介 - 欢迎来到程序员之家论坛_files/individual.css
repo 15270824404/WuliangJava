@@ -1,0 +1,43 @@
+.leftbotton {
+	font-size: 12px;
+	color: #930;
+	text-indent: 15px;
+}
+.font1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #930;
+	letter-spacing: 2px;
+	text-indent: 15px;
+}
+.font2 {
+	font-size: 12px;
+	line-height: 20px;
+	color: #c63;
+	display: block;
+	text-align: left;
+	word-spacing: 15em;
+}
+.i-listbd{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #930;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #fdcc82;
+	padding-left: 10px;
+}
+.font3 {
+	font-size: 12px;
+	line-height: 20px;
+	color: #fff;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.font4 {
+	font-size: 12px;
+	line-height: 20px;
+	color: #069;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-left: 10px;
+}

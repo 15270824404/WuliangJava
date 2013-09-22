@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0055)http://blog.csdn.net/tianlincao/article/details/6124803 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Hibernate/JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET</title>
+
+<meta name="description" content="Hibernate/JPA中的继承映射 Hibernate中的继承映射 Hibernate的继承映射包含了三种不同的策略：每簇类使用一个表； 每个子类一个表； 每个具体内一个表（有限制）。 假设我们有四个类Animal，Dog，Cat，其代码如下：文件名：Animal.javaclass Animal {    private String identifier;    private String name; ">
+<script type="text/javascript" async="" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ga.js"></script><script src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+<script src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/plugins.js" type="text/javascript"></script>
+<script src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad.js"></script>
+<link rel="Stylesheet" type="text/css" href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/style.css">
+<link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/tianlincao/rss/list">
+<link rel="shortcut icon" href="http://blog.csdn.net/favicon.ico">
+<link type="text/css" rel="stylesheet" href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/default.css">
+</head>
+<body>
+<script src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/pub_topnav_2011.js" type="text/javascript"></script><link rel="stylesheet" type="text/css" href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/navtop_2012.css">
+<div class="nav_top_2011">
+<p><span style="color:red;">您还未登录！</span>|<a href="https://passport.csdn.net/account/login" target="_top">登录</a>|<a href="https://passport.csdn.net/account/register" target="_top">注册</a>|<a href="https://passport.csdn.net/help/faq" target="_blank">帮助</a></p><ul>
+<li><a href="http://www.csdn.net/" target="_blank">首页</a></li>
+<li><a href="http://news.csdn.net/" target="_blank">业界</a></li>
+<li><a href="http://mobile.csdn.net/" target="_blank">移动</a></li>
+<li><a href="http://cloud.csdn.net/" target="_blank">云计算</a></li>
+<li><a href="http://sd.csdn.net/" target="_blank">研发</a></li>
+<li><a href="http://bbs.csdn.net/" target="_blank">论坛</a></li>
+<li><a href="http://blog.csdn.net/" target="_blank">博客</a></li>
+<li><a href="http://download.csdn.net/" target="_blank">下载</a></li>
+<li class="more"><h2 id="topnav_btnmore" onclick="showNavMore(this)"><a href="javascript:void(0);">更多</a></h2>
+<div id="topnav_hidlist">
+<iframe name="nav_frm" src="about:blank" width="92" height="178" scrolling="no" frameborder="no"></iframe>
+</div>
+</li>
+</ul>
+</div>
+
+
+<div id="container">
+<div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h1><a href="http://blog.csdn.net/tianlincao">叶落枫亭</a></h1>
+            <h2>静 、 思 、 雅 、 行</h2>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg"></div>
+    <div class="navigator">
+        <ul>
+            <li id="btnContents"><a href="http://blog.csdn.net/tianlincao?viewmode=contents"><span><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+            <li id="btnView"><a href="http://blog.csdn.net/tianlincao?viewmode=list"><span><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+            <li id="btnRss"><a href="http://blog.csdn.net/tianlincao/rss/list"><span><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>
+</ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "tianlincao";
+    var blog_address = "http://blog.csdn.net/tianlincao";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";
+</script>
+        
+<div id="body">
+<div id="main">
+<div class="main">
+<div class="notice"> 
+
+<a href="http://bbs.csdn.net/topics/390268376" target="_blank">
+<font color="red">
+CSDN论坛重写完毕，正式上线！ </font></a>
+
+&nbsp;&nbsp;
+
+
+<a href="http://hbtc2012.hadooper.cn/" target="_blank">
+<font color="red"> Hadoop与大数据精彩议题发布</font></a>
+
+&nbsp;&nbsp;&nbsp;
+
+
+<a href="http://blog.csdn.net/zhangoi391/article/details/8161343" target="_blank">
+<font color="red">2000元大奖征异构开发博文  </font></a>
+
+<br>
+
+
+
+
+
+<a href="http://blog.csdn.net/csdnproduct/article/details/8140597" target="_blank">
+<font color="red">CSDN博客频道搬家功能改版正式上线！ </font></a>
+
+&nbsp;&nbsp;
+
+<a href="http://events.csdn.net/DR2012/roadshow/index.html" target="_blank">
+<font color="red">【免费】解读海外市场营销奥秘   </font></a>
+
+&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/csdnproduct/article/details/8101993" target="_blank">
+<font color="red">CSDN博客频道推出TAG功能  </font></a>
+
+</div><div id="article_details" class="details">
+    <div class="article_title">
+    <span class="ico ico_type_Repost"></span>
+    <h3>
+        <span class="link_title"><a href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET.htm">
+        Hibernate/JPA中的继承映射 实体extends的关系(每个子类独立一个表)
+        </a></span>
+    </h3>
+</div>
+
+        
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/tianlincao/article/category/759104">Hibernate</a> 
+        </span>
+    <span class="link_postdate">2011-01-08 22:58</span>
+    <span class="link_view" title="阅读次数">243人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/tianlincao/article/details/6124803#comments">评论</a>(0)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:collectArticle(&#39;Hibernate/JPA中的继承映射 实体extends的关系(每个子类独立一个表)&#39;,&#39;6124803&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/tianlincao/article/details/6124803#report" onclick="javascript:report(6124803,2);return false;" title="举报">举报</a></span>
+    
+</div>
+
+
+    
+<div style="clear:both"></div><div style="border:solid 1px #ccc; background:#eee; float:left; min-width:200px;padding:4px 10px;"><p style="text-align:right;margin:0;"><span style="float:left;">目录<a href="http://blog.csdn.net/tianlincao/article/details/6124803#" title="系统根据文章中H1到H6标签自动生成文章目录">(?)</a></span><a href="http://blog.csdn.net/tianlincao/article/details/6124803#" onclick="javascript:return openct(this);" title="展开">[+]</a></p><ol style="display:none;margin-left:14px;padding-left:14px;line-height:160%;"><li><a href="http://blog.csdn.net/tianlincao/article/details/6124803#t0">Hibernate/JPA中的继承映射 </a></li><ol><li><a href="http://blog.csdn.net/tianlincao/article/details/6124803#t1">JPA中的实体层次设计</a></li></ol></ol></div><div style="clear:both"></div><div id="article_content" class="article_content">
+<table style="width: 100%; table-layout: fixed;" border="0">
+<tbody>
+<tr>
+<td>
+<div id="blog_text" class="cnt">
+<h1 class="postTitle"><a name="t0"></a><a class="postTitle2" href="http://www.cnblogs.com/eafy/archive/2008/09/23/1296665.html">Hibernate/JPA中的继承映射 </a></h1>
+<div class="postBody">
+<div class="postTitle"><a class="postTitle2" href="http://www.blogjava.net/Tower/archive/2005/03/02/1617.html">Hibernate中的继承映射</a></div>
+<p>&nbsp;</p>
+<p><br>Hibernate的继承映射包含了三种不同的策略：</p>
+<ol>
+<li>每簇类使用一个表； </li>
+<li>每个子类一个表； </li>
+<li>每个具体内一个表（有限制）。 </li>
+</ol>
+<p>假设我们有四个类Animal，Dog，Cat，其代码如下：<br>文件名：Animal.java</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockStart.gif" alt="" align="top"><img style="display: none;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ContractedBlock.gif" alt="" align="top"><span style="color: #0000ff;">class</span><span style="color: #000000;"> Animal </span><span style="background-color: #ffffff; display: none; border: #808080 1px solid;"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""></span><span><span style="color: #000000;">{<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">private</span><span style="color: #000000;"> String identifier;<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">private</span><span style="color: #000000;"> String name;<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">private</span><span style="color: #000000;"> String category;<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;">//</span><span style="color: #008000;"> setter and getter</span><span style="color: #008000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockEnd.gif" alt="" align="top"></span><span style="color: #000000;">}</span></span></div>
+</div>
+<p><br>文件名：Dog.java</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockStart.gif" alt="" align="top"><img style="display: none;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ContractedBlock.gif" alt="" align="top"><span style="color: #0000ff;">class</span><span style="color: #000000;"> Dog extends Animal </span><span style="background-color: #ffffff; display: none; border: #808080 1px solid;"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""></span><span><span style="color: #000000;">{<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">private</span><span style="color: #000000;"> String <img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;">//</span><span style="color: #008000;"> setter and getter</span><span style="color: #008000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockEnd.gif" alt="" align="top"></span><span style="color: #000000;">}</span></span></div>
+</div>
+<p><br>文件名：Cat.java</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockStart.gif" alt="" align="top"><img style="display: none;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ContractedBlock.gif" alt="" align="top"><span style="color: #0000ff;">class</span><span style="color: #000000;"> Cat extends Animal </span><span style="background-color: #ffffff; display: none; border: #808080 1px solid;"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""></span><span><span style="color: #000000;">{<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">private</span><span style="color: #000000;"> String <img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/InBlock.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;">//</span><span style="color: #008000;"> setter and getter</span><span style="color: #008000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ExpandedBlockEnd.gif" alt="" align="top"></span><span style="color: #000000;">}</span></span></div>
+</div>
+<p>&nbsp;</p>
+<ul>
+<li><strong>每簇类使用一个表</strong> </li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 使用每簇类使用一个表的策略时，有一个限制就时子类不能有NOT NULL，映射文件为：<br>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 文件名：Animal.hbm.xml</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top"><span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">class </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Animal"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="TB_ANIMAL"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="identifier"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="IDENTIFIER"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">generator </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="uuid.hex"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">id</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">discriminator </span><span style="color: #ff0000;">column</span><span style="color: #0000ff;">="ANIMAL_TYPE"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="NAME"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">subclass </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Dog"</span><span style="color: #ff0000;"> discriminator-value</span><span style="color: #0000ff;">="DOG"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">subclass</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">subclass </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Cat"</span><span style="color: #ff0000;"> discriminator-value</span><span style="color: #0000ff;">="CAT"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">subclass</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">class</span><span style="color: #0000ff;">&gt;</span></div>
+</div>
+<p>&nbsp;</p>
+<ul>
+<li><strong>每个子类一个表</strong> </li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 使用每个子类一个表的策略时，可以使用一个映射文件实现，也可以分成多个映射文件来实现。每个子类一个映射文件的情况：<br>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 文件名：Animal.hbm.xml</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top"><span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">class </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Animal"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="ANIMAL"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="identifier"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="IDENTIFIER"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">generator </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="uuid.hex"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">id</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""></span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">class</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 文件名：Dog.hbm.xml<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">joined-subclass </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Dog"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="DOG"</span><span style="color: #ff0000;"> extends</span><span style="color: #0000ff;">="Animal"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">key </span><span style="color: #ff0000;">column</span><span style="color: #0000ff;">="DOG_ID"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">joined-subclass</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 文件名：Cat.hbm.xml<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">joined-subclass </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Cat"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="CAT"</span><span style="color: #ff0000;"> extends</span><span style="color: #0000ff;">="Cat"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">key </span><span style="color: #ff0000;">column</span><span style="color: #0000ff;">="CAT_ID"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">joined-subclass</span><span style="color: #0000ff;">&gt;</span></div>
+</div>
+<p><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 每个子类一个表的策略实际上一种one-to-one的映射。</p>
+<ul>
+<li><strong>每个具体内一个表（有限制）</strong> </li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 使用每个具体内一个表（有限制）策略时，每一个子类的映射文件将要包含所有父类中的属性，映射文件：<br>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 文件名：Dog.hbm.xml</p>
+<div style="padding-bottom: 4px; padding-left: 5.4pt; width: 98%; padding-right: 5.4pt; background: #e6e6e6; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top"><span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">class </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Dog"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="DOG"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="identifier"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="IDENTIFIER"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">generator </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="uuid.hex"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">id</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="NAME"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">class</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 文件名：Cat.hbm.xml<br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">class </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="Cat"</span><span style="color: #ff0000;"> table</span><span style="color: #0000ff;">="CAT"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="identifier"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="IDENTIFIER"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">generator </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="uuid.hex"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">id</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="NAME"</span><span style="color: #ff0000;"> type</span><span style="color: #0000ff;">="string"</span><span style="color: #0000ff;">/&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/dot.gif" alt=""><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">class</span><span style="color: #0000ff;">&gt;</span><span style="color: #000000;"><br><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/None.gif" alt="" align="top"></span></div>
+</div>
+<p>&nbsp;</p>
+<h3 title="随笔"><a name="t1"></a><a href="http://www.cnblogs.com/blog/232870"><span style="color: #108ac6;"><span class="hilite1"><span style="background-color: #ffff00; font-size: x-small;"><span style="font-size: xx-small;">JPA</span></span></span>中的实体层次设计</span></a></h3>
+<div class="blog_content">
+<div class="item-content">
+<p>这部分的内容基本与Hibernate一致.<span class="hilite1"><span style="background-color: #ffff00;">JPA</span></span>同样支持3种类型的继承形式:</p>
+<p>1.<span style="text-decoration: underline;"><span style="color: #800080;">Single Table Strategy</span> </span>,单表策略,一张表包含基类与子类的所有数据,很多情况下都是采用这样的冗余设计,通过一个discriminator来区分</p>
+<p>2.<span style="text-decoration: underline;"><span style="color: #800080;">Table Per Class Strategy</span> </span>,每个子类对应一张表,每张表都拥有基类的属性</p>
+<p>3.<span style="text-decoration: underline;"><span style="color: #800080;">Join Strategy</span> </span>,仍然是每个子类对应一张表，但此表中不包含基类的属性,仅仅是此子类的扩展属性,共享基类的属性</p>
+<p>&nbsp;</p>
+<p>以一个例子来说明3种情况:</p>
+<p>一.单表策略</p>
+<p>比如Pet作为基类,Cat和Dog继承此类并拥有自己的扩展属性,如:</p>
+<p>package com.denny_blue.ejb3.inheritance;</p>
+<p>import java.io.Serializable;</p>
+<p>import javax.persistence.DiscriminatorColumn;<br>import javax.persistence.DiscriminatorType;<br>import javax.persistence.Entity;<br>import javax.persistence.GeneratedValue;<br>import javax.persistence.GenerationType;<br>import javax.persistence.Id;<br>import javax.persistence.Inheritance;<br>import javax.persistence.<span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>;</p>
+<p>@Entity<br>@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.SINGLE_TABLE)<br>@DiscriminatorColumn(name = "animal_type", discriminatorType = DiscriminatorType.STRING)<br>public class Pet implements Serializable {<br>private int id;</p>
+<p>private String name;</p>
+<p>private double weight;</p>
+<p>public Pet() {<br>}</p>
+<p>@Id<br>@GeneratedValue(strategy = GenerationType.AUTO)<br>public int getId() {<br>&nbsp;&nbsp; return id;<br>}</p>
+<p>public void setId(int id) {<br>&nbsp;&nbsp; this.id = id;<br>}</p>
+<p>public String getName() {<br>&nbsp;&nbsp; return name;<br>}</p>
+<p>public void setName(String name) {<br>&nbsp;&nbsp; this.name = name;<br>}</p>
+<p>public double getWeight() {<br>&nbsp;&nbsp; return weight;<br>}</p>
+<p>public void setWeight(double weight) {<br>&nbsp;&nbsp; this.weight = weight;<br>}</p>
+<p>}</p>
+<p>Pet类值的注意的就是通过@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.SINGLE_TABLE)确定采用单表策略,通过@DiscriminatorColumn确定了标志值的字段和类型，我想熟悉hibernate的朋友对这些都应该很熟悉.然后是两个子类:</p>
+<p>//Cat.java</p>
+<p>package com.denny_blue.ejb3.inheritance;</p>
+<p>import javax.persistence.DiscriminatorColumn;<br>import javax.persistence.DiscriminatorType;<br>import javax.persistence.DiscriminatorValue;<br>import javax.persistence.Entity;<br>import javax.persistence.Inheritance;<br>import javax.persistence.<span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>;</p>
+<p>@Entity<br>@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.SINGLE_TABLE)<br>@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)<br>@DiscriminatorValue("cat")<br>public class Cat extends Pet {<br>private String HairBall;</p>
+<p>public String getHairBall() {<br>&nbsp;&nbsp; return HairBall;<br>}</p>
+<p>public void setHairBall(String hairBall) {<br>&nbsp;&nbsp; HairBall = hairBall;<br>}</p>
+<p>}</p>
+<p>//Dog.java</p>
+<p>package com.denny_blue.ejb3.inheritance;</p>
+<p>import javax.persistence.DiscriminatorColumn;<br>import javax.persistence.DiscriminatorType;<br>import javax.persistence.DiscriminatorValue;<br>import javax.persistence.Entity;<br>import javax.persistence.Inheritance;<br>import javax.persistence.<span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>;</p>
+<p>@Entity<br>@Inheritance(strategy=<span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.SINGLE_TABLE)<br>@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING)<br>@DiscriminatorValue("dog")<br>public class Dog extends Pet {<br>private String trick;</p>
+<p>public String getTrick() {<br>&nbsp;&nbsp; return trick;<br>}</p>
+<p>public void setTrick(String trick) {<br>&nbsp;&nbsp; this.trick = trick;<br>}</p>
+<p>}</p>
+<p>两个子类最值的关注的就是@DiscriminatorValue注释,比如Cat的此值为cat,意味着当Cat类型的Entity存入数据库时,<span class="hilite1"><span style="background-color: #ffff00;">JPA</span></span>将自动把cat的值赋给animal_type字段,Dog的值则为dog,由此就可以在同一张表中区分开两个不同的子类.</p>
+<p>&nbsp;</p>
+<p>二.Table per Class</p>
+<p>采用Table Per Class策略的话，每个子类都将单独建表，并且都独立拥有基类中的所有属性,互相之间不共享,在我们的例子中所要进行的修改很小,像这样:</p>
+<p>//基类</p>
+<p>@Entity<br>@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.TABLE_PER_CLASS)<br>public class Pet implements Serializable {<br>private int id;</p>
+<p>private String name;</p>
+<p>private double weight;</p>
+<p>........</p>
+<p>//子类:不需要任何设置</p>
+<p>@Entity<br>public class Dog extends Pet {<br>private String trick;</p>
+<p>.......</p>
+<p>.......</p>
+<p>}</p>
+<p>例：</p>
+<p>@Entity<br>@Table(name = "TEST_A")<br>@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)<br>public class TestA implements java.io.Serializable {</p>
+<p>// Fields</p>
+<p>/**<br>* <br>*/<br>private static final long serialVersionUID = 5931010626625178698L;<br>private Long id;<br>private String name;<br>private String code;</p>
+<p>// Constructors<br>public TestA() {</p>
+<p>}</p>
+<p>/** minimal constructor */<br>public TestA(Long id) {<br>&nbsp;&nbsp; this.id = id;<br>}</p>
+<p>/** full constructor */<br>public TestA(Long id, String name, String code) {<br>&nbsp;&nbsp; this.id = id;<br>&nbsp;&nbsp; this.name = name;<br>&nbsp;&nbsp; this.code = code;<br>}</p>
+<p>// Property accessors<br>@Id<br>@Column(name = "ID")<br>@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")<br>@SequenceGenerator(name="SEQ", sequenceName = "SEQ_TEMP_VOICE_FILE")<br>public Long getId() {<br>&nbsp;&nbsp; return this.id;<br>}</p>
+<p>public void setId(Long id) {<br>&nbsp;&nbsp; this.id = id;<br>}</p>
+<p>@Column(name = "NAME", unique = false, nullable = true, insertable = true, updatable = true, length = 200)<br>public String getName() {<br>&nbsp;&nbsp; return this.name;<br>}</p>
+<p>public void setName(String name) {<br>&nbsp;&nbsp; this.name = name;<br>}</p>
+<p>@Column(name = "CODE", unique = false, nullable = true, insertable = true, updatable = true, length = 200)<br>public String getCode() {<br>&nbsp;&nbsp; return this.code;<br>}</p>
+<p>public void setCode(String code) {<br>&nbsp;&nbsp; this.code = code;<br>}</p>
+<p>}</p>
+<p>@Entity<br>@Table(name = "TEST_B")<br>public class TestB extends TestA {</p>
+<p>// Fields</p>
+<p>/**<br>* <br>*/<br>private static final long serialVersionUID = 4942564072409132522L;</p>
+<p><br>/** minimal constructor */<br>public TestB() {</p>
+<p>}<br>public TestB(Long id) {<br>&nbsp;&nbsp; this.setId(id);<br>}</p>
+<p>@Column(name = "FLAG", unique = false, nullable = true, insertable = true, updatable = true, precision = 1, scale = 0)<br>public Long getFlag() {<br>&nbsp;&nbsp; return this.flag;<br>}</p>
+<p>public void setFlag(Long flag) {<br>&nbsp;&nbsp; this.flag = flag;<br>}</p>
+<p>}</p>
+<p>&nbsp;</p>
+<p>三.Join策略</p>
+<p>每个子类同样独立建表,基类也独立建表，只不过所有的子类的表中只有扩展属性,他们共享基类的表,在我们的例子中修改下即可:</p>
+<p>//基类</p>
+<p>@Entity<br>@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.JOINED)<br>public class Pet implements Serializable {<br>private int id;</p>
+<p>private String name;</p>
+<p>private double weight;</p>
+<p>........</p>
+<p>//子类</p>
+<p>@Entity</p>
+<p>@Inheritance(strategy = <span class="hilite2"><span style="background-color: #55ff55;">InheritanceType</span></span>.JOINED)<br>public class Dog extends Pet {<br>private String trick;</p>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+</div>
+<div class="share_buttons" id="sharePanel"><span>分享到：</span> <a name="sina" class="share_sina" title="分享到新浪微博"></a><a name="qq" class="share_qq" title="分享到腾讯微博"></a></div>
+<!--192.168.1.236-->
+<div class="article_next_prev">
+    <li class="prev_article"><span>上一篇：</span><a href="http://blog.csdn.net/tianlincao/article/details/6124793">Hibernate映射与注解实例</a></li>
+    <li class="next_article"><span>下一篇：</span><a href="http://blog.csdn.net/tianlincao/article/details/6124846">浅谈领域模型驱动中表的设计方法</a></li>
+</div>
+
+
+    
+</div>
+<div id="ad_cen"><iframe id="ad_frm_0" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 1093px; height: 92px;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad(1).htm"></iframe></div>
+<script type="text/javascript">
+    new Ad(4, 'ad_cen');
+</script>
+<div id="comment_title" class="panel_head">查看评论<a name="comments"></a></div>
+<div id="comment_list"><br>&nbsp;&nbsp;暂无评论<br><br><div class="clear"></div></div>
+<div id="comment_bar"></div>
+<div id="comment_form"><div class="guest_link">您还没有登录,请<a href="http://passport.csdn.net/account/login?from=http%3A%2F%2Fblog.csdn.net%2Ftianlincao%2Farticle%2Fdetails%2F6124803">[登录]</a>或<a href="http://passport.csdn.net/account/register?from=http%3A%2F%2Fblog.csdn.net%2Ftianlincao%2Farticle%2Fdetails%2F6124803">[注册]</a></div></div>
+<div class="announce">* 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+<script type="text/javascript">
+    var fileName = '6124803';
+    var commentscount = 0;
+    var islock = false
+</script>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/comment.js"></script>
+<div id="ad_bot"><iframe id="ad_frm_1" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 1093px; height: 170px;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad(2).htm"></iframe></div>
+<script type="text/javascript">
+    new Ad(5, 'ad_bot');
+</script>
+<div id="report_dialog"></div>
+
+<div id="d-top">
+<a href="http://blog.csdn.net/tianlincao/article/details/6124803#" onclick="javascript:document.body.scrollTop=0;document.documentElement.scrollTop=0;this.blur();return false;" title="回到顶部">
+<img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/top.png" alt="TOP"></a>
+</div>
+
+
+
+<div class="clear"></div>
+</div>
+</div>
+
+<div id="side">
+<div class="side">
+<div id="panel_Profile" class="panel">
+    <ul class="panel_head"><span>个人资料</span></ul>
+    <ul class="panel_body profile">
+        <div id="blog_userface">
+            <a href="http://my.csdn.net/tianlincao" target="_blank">
+            <img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/1_tianlincao.jpg" title="访问我的空间" style="max-width:90%">
+            </a>
+            <br>
+            <span><a href="http://my.csdn.net/tianlincao" target="_blank">tianlincao</a></span>
+        </div>
+<div class="interact">
+<!--<a href="#" class="attented" title="已关注"></a>-->
+<a href="http://blog.csdn.net/tianlincao/article/details/6124803#" class="attent" id="span_add_follow" title="[加关注]"></a>
+<a href="http://my.csdn.net/my/letter/send/tianlincao" class="letter" title="[发私信]"></a>
+</div>
+        <div id="blog_medal">
+        <div id="bms_box"><a href="http://medal.blog.csdn.net/allmedal.aspx" target="_blank"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/holdon_s2.gif" onmouseover="m_over_m(this,0)" onmouseout="m_out_m()" alt=""></a></div></div>
+        <ul id="blog_rank">
+            <li>访问：<span>108804次</span></li>
+            <li>积分：<span>2695分</span></li>
+            <li>排名：<span>第1959名</span></li>
+        </ul>
+        <ul id="blog_statistics">
+            <li>原创：<span>148篇</span></li>
+            <li>转载：<span>108篇</span></li>
+            <li>译文：<span>0篇</span></li>
+            <li>评论：<span>36条</span></li>
+        </ul>
+    </ul>
+</div>
+<script type="text/javascript">
+    var _blogger = 'tianlincao';
+</script>
+<script type="text/javascript">
+$(document).ready(function () {
+    var un = getUN().toLowerCase();
+    if (un == _blogger.toLowerCase()) {
+        $('.interact').hide();
+    } else if(un) {
+        var url = "http://my.csdn.net/index.php/follow/check_is_followed/" + encodeURIComponent(un) + "/" + encodeURIComponent(_blogger) + "?jsonpcallback=?";
+        $.getJSON(url, {}, function (data) {
+            if (data.succ == 1 && data.info == 1) {
+                $('#span_add_follow').attr('class', 'attented');
+            } else {
+                $('#span_add_follow').click(guanzhu);
+            }
+        }, 'json');
+    }
+});
+function guanzhu() {
+    var url = "http://my.csdn.net/index.php/follow/do_follow?jsonpcallback=?";
+    $.getJSON(url, { "username": _blogger }, function (data) {
+        if (data.succ == 1) {
+            alert('关注成功！');
+            $('#span_add_follow').attr('class', 'attented').click(function () { return false; });
+        } else {
+            alert(data.msg);
+        }
+    });
+    return false;
+}
+function getUN() {
+    var m = document.cookie.match(new RegExp("(^| )UserName=([^;]*)(;|$)"));
+    if (m) return m[2];
+    else return '';
+}
+</script>
+
+<div id="panel_Category" class="panel">
+    <ul class="panel_head"><span>文章分类</span></ul>
+    <ul class="panel_body">
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/759104">Hibernate</a><span>(14)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/555407">Java</a><span>(40)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/775599">JavaScript</a><span>(7)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/770226">jBPM</a><span>(2)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/472444">Jsp</a><span>(19)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/775540">LAMP</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/793635">Linux</a><span>(14)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/518659">My SQL</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/472448">Oracle</a><span>(25)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/505374">PHP</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/491388">SOA</a><span>(0)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/759105">Spring</a><span>(3)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/643105">Struts</a><span>(7)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/778836">WebService</a><span>(6)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/504164">Windows</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/770166">开发工具</a><span>(2)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/778494">正则表达式</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/533914">求职</a><span>(9)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/775056">法律知识</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/766486">设计模式</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/758187">语言</a><span>(6)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/775495">资源收集</a><span>(5)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/473285">随想</a><span>(13)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/774925">领域模型</a><span>(2)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/871930">Android 机器人</a><span>(3)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/879604">Web 组成</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/903425">JMS</a><span>(0)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/904372">lucene</a><span>(3)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/905195">RBAC</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/920385">系统运维</a><span>(4)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/939912">架构设计</a><span>(3)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/942353">算法设计</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/950658">ibatis</a><span>(2)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/957711">DWR</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/957789">DB2</a><span>(7)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1075130">J</a><span>(0)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1075131">JQuery</a><span>(4)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1113570">通用代码</a><span>(2)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1120817">easyui</a><span>(5)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1148599">幽默笑话</a><span>(5)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/tianlincao/article/category/1175157">项目管理</a><span>(1)</span>
+        </li>
+    </ul>
+</div><div id="hotarticls" class="panel">
+    <ul class="panel_head"><span>阅读排行</span></ul>
+    <ul class="panel_body itemlist">
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/7520400" title="阿里软件资深架构师李战谈：开发者的人品问题">阿里软件资深架构师李战谈：开发者的人品问题</a><span>(10164)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/7721478" title="工作就是这么简单——去哪儿网CTO吴永强">工作就是这么简单——去哪儿网CTO吴永强</a><span>(5925)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/7206814" title="YY的自圆其说 -- 2011年中美金融战原来是如此心惊胆战">YY的自圆其说 -- 2011年中美金融战原来是如此心惊胆战</a><span>(5818)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/5654880" title="JAVA保留小数点">JAVA保留小数点</a><span>(4150)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/4254229" title="Struts2 动态方法调用">Struts2 动态方法调用</a><span>(3406)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/4061015" title="java单例模式">java单例模式</a><span>(2866)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/7574955" title="中国特色抢答题，看看你能答对几个">中国特色抢答题，看看你能答对几个</a><span>(2640)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/6084141" title="Hibernate的fetch">Hibernate的fetch</a><span>(2535)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/5376208" title="CAS 配置（基于tomcat 6）">CAS 配置（基于tomcat 6）</a><span>(2524)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/tianlincao/article/details/7523831" title="老版俏皮话">老版俏皮话</a><span>(2257)</span>
+        </li>
+    </ul>
+</div>
+<div id="homepageArticles" class="panel">
+    <ul class="panel_head"><span>推荐文章</span></ul>
+    <ul class="panel_body" id="ad_commend">
+    <iframe id="ad_frm_2" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 194px; height: 218px;" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad.htm"></iframe></ul>
+</div>
+<script type="text/javascript">
+    new Ad(12, 'ad_commend');
+</script><div id="custom_column_991049" class="panel">
+    <ul class="panel_head"><span>bolg收藏</span></ul>
+    <ul class="panel_body">
+        
+<ul>
+<li><a href="http://blog.csdn.net/tianlesoftware" target="_blank">David Dai -- Focus on Oracle</a>
+</li><li><a href="http://blog.csdn.net/newhappy2008" target="_blank">http://blog.csdn.net/newhappy2008</a>
+</li><li><a href="http://blog.csdn.net/fenglibing" target="_blank">JAVA老鸟</a></li><li><a href="http://hi.baidu.com/luodaijun/blog" target="_blank">小罗的空间</a></li><li><a href="http://hi.baidu.com/wangyu1987530/blog/index/0" target="_blank">web探索者</a></li><li><a href="http://www.uml.org.cn/index.asp" target="_blank">UML软件工作组织</a></li><li><a href="http://www.jdon.com/jdonframework/" target="_blank">J道</a></li><li><a href="http://blog.csdn.net/tianlesoftware/category/714767.aspx" target="_blank">David Dai</a></li><li><a href="http://blog.csdn.net/v_JULY_v/archive/2011/01/15/6142146.aspx" target="_blank">数据挖掘算法</a></li><li><a href="http://www.blogjava.net/amigoxie/" target="_blank">阿密果</a></li><li><a href="http://blog.csdn.net/Android_Tutor" target="_blank">Android—Tutor</a></li></ul>
+
+    </ul>
+</div></div>
+<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+</div>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/shCore-src.js"></script>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ZeroClipboard.js"></script>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/article_code.js"></script>
+
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/show.js"></script>
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="http://counter.csdn.net/pv.aspx?id=24" border="0" width="0" height="0">
+
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/publib_footer.js"></script><link rel="stylesheet" type="text/css" href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/pub_footer_2012.css"><div class="pub_footerall"><dl><dt></dt> <dd><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a>|<a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a>|<a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a>|<a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a>|<a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a>|<a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a>|<a href="mailto:webmaster@csdn.net">问题报告</a></dd><dd>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd><dd>北京创新乐知信息技术有限公司 版权所有</dd><dd><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ico_email.gif" alt="" title=""> 联系邮箱：webmaster(at)csdn.net</dd><dd>Copyright © 1999-2012, CSDN.NET, All Rights Reserved&nbsp;<a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div>
+
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+
+<!--ad.csdn.net-->
+<script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad-blog.js"></script><script type="text/javascript" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/ad-ibm412.js"></script>
+
+
+
+
+</div>
+
+<link href="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/message_pop.css" rel="stylesheet" type="text/css"><div style="display: block;" id="_popup_msg_container">
+
+<div wistate="max" id="im_popupWindow_miniMsg" class="im_popupWindow" style="display: none; height: 0px;">
+	<h6 class="wi_draggable"><span></span><a onclick="_message_tips_pop(&#39;down&#39;);return false;"><img alt="close" class="founctionpic3" src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/pic_close.gif"></a></h6>
+    <div id="im_popupWindow_miniMsgContent" class="wi_content">
+		<div class="kuai">
+			<div style="width:280px;"><a href="http://teched2012.csdn.net/" target="_blank"><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/wr.jpg" alt="" border="0" style="border:0;" title=""></a></div>
+		</div>
+	</div>
+	<div class="content_qq"><span onclick="window.open(&#39;https://itunes.apple.com/cn/app/cheng-xu-yuan-za-zhi/id544773337&#39;)" target="_blank">程序员杂志ipad1.1版发布送半年杂志</span>
+ </div>
+ 
+</div>
+</div><img src="./Hibernate JPA中的继承映射 实体extends的关系(每个子类独立一个表) - 叶落枫亭 - 博客频道 - CSDN.NET_files/count_new.php" style="display: none;"></body></html>

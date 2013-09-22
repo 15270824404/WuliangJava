@@ -1,0 +1,21 @@
+uedit32
+新建命令→CTRL+N
+打开命令→CTRL+O
+快速打开命令→CTRL+Q
+文件树视图界面 →Ctrl+U
+复制行→Ctrl+Alt+D
+插入行命令 → Ctrl+Enter
+查找上一个 → CTRL+F3
+列模式→alt+F6
+转换大小写命令 →SHIFT+F5 
+字首大写命令→F5
+转为小写字母→CTRL+F5 
+转为大写字母命令→ALT+F5 
+
+删除行命令 → CTRL+E
+日期/时间命令 →F7
+删除到行末命令→CTRL+F12 
+删除到行首命令→CTRL+F11
+关闭命令 → CTRL+F4 
+另存为命令 → F12
+

@@ -1,0 +1,170 @@
+
+/*注册表单头样式*/
+#register_form_header{
+	background: url(d/register-form-bg.gif) repeat-x 0 0;
+}
+/*表单数据类样式*/
+.table_title {
+	padding-top:7px;
+	padding-left:25px;
+	height: auto;
+	color: #BA7203;
+	font-weight: bold;
+	background: url(d/table-title-bg.gif) repeat-x 0 0;
+}
+
+.table_title_tr {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #930;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #fdcc82;
+	padding-left: 10px;
+	font-weight: bold;
+}
+
+.table_title_tr2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #930;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #fdcc82;
+	padding-left: 10px;
+	font-weight: bold;
+	padding-top:7px;
+	height: 25px;
+	background: url(d/table-title-bg.gif) repeat-x 0 0;
+}
+.input_table {
+	width:100%;
+}
+/*表单输入td*/
+.input_table .item_name_td {
+	font-size: 12px;
+	padding-right: 5px;
+	padding-left: 25px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CD9C40;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+/*表单输入td*/
+.input_table .item_input_td {
+	font-size: 12px;
+	padding-right: 25px;
+	padding-left: 5px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CD9C40;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #CD9C40;
+	
+}
+.input_table .item_name {
+	font-weight: bold;
+	
+}
+.input_table .item_hint {
+	color:gray;
+}
+/*表单输入*/
+.input_table .item_input {
+	font-size: 12px;
+	color: #BA7203;
+	border: 1px solid #CD9C40;
+	padding: 1px;
+}
+
+.object_view_table {
+	width:100%;
+}
+.objects_list_table {
+	padding-left: 25px;
+	width:100%;
+}
+/*表单输入td*/
+.object_view_table .item_name_td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000;
+	padding-right: 5px;
+	padding-left: 25px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CD9C40;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.objects_list_table .table_row {
+	font-size: 12px;
+	color: #930;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #fdcc82;
+}
+/*表单输入td*/
+.object_view_table .item_value_td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: gray;
+	padding-right: 25px;
+	padding-left: 5px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CD9C40;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #CD9C40;
+}
+
+
+/*table表单的按纽*/
+.table_btns {
+	padding-top:2px;
+	padding-left: 25px;
+	color: #BA7203;
+	background-color: #fffaea;
+	border-top: 1px solid #CD9C40;
+	border-bottom: 1px solid #CD9C40;
+	height:30px;
+}
+
+
+/*按纽样式*/
+.btn {
+	width:100px;
+}
+/*提示信息使用，这里留空便可*/
+#blk{}
+
+
+
+.message_bar {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #930;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #fdcc82;
+	padding-left: 10px;
+	background-color:#fffaea;
+}
+.message_bar li {
+	background-color:#fffaea;
+}
+
+
+
+
+
+
+
+
